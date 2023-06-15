@@ -85,6 +85,21 @@ describe("findAll", function () {
       },
     ]);
   });
+
+  test("works: testing the filter function", async ()=>{
+    const resp = await request(app).
+    get("/companies").query({minEmployees: 2, maxEmployees: 3, name: "3"});
+
+    expect(resp.body).toEqual({companies:[
+      {
+        handle: "c3",
+          name: "C3",
+          description: "Desc3",
+          numEmployees: 3,
+          logoUrl: "http://c3.img",
+      }
+    ]})
+  })
 });
 
 /************************************** get */
