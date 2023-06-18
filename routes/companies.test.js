@@ -61,6 +61,25 @@ describe("POST /companies", function () {
         .set("authorization", `Bearer ${u1Token}`);
     expect(resp.statusCode).toEqual(400);
   });
+
+  test("okay for admin", async ()=> {
+    const resp = await request(app)
+      .post("/companies")
+      .send({newCompany})
+      .set("authorization", `Bearer ${adminToken}`);
+    expect(resp.statusCode).toEqual(201);
+    expect(resp.body).toEqual({
+      company: newCompany
+    })
+  });
+
+  test("not okay for admin", async()=> {
+    const resp = await request(app)
+    .post("/companies")
+    .send({newCompany})
+    .set("authorization", `Bearer ${u1Token}`);
+    expect(resp.statusCode).toEqual(401)
+  });
 });
 
 /************************************** GET /companies */
@@ -226,4 +245,10 @@ describe("DELETE /companies/:handle", function () {
         .set("authorization", `Bearer ${u1Token}`);
     expect(resp.statusCode).toEqual(404);
   });
+
+  test("authorized for admin", async()=>{
+    const resp = await request(app).delete("companies/c1")
+    .set("authorization", `Bearer ${adminToken}`);
+    expect(resp.body).toEqual(204)
+  })
 });

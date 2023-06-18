@@ -43,6 +43,20 @@ function ensureLoggedIn(req, res, next) {
 }
 
 
+// if user.login or admin, can update info
+
+function ensureAdmin(req, res, next) {
+  try {
+    if (!res.locals.user || !res.locals.isAdmin) {
+      throw new UnauthorizedError()
+    };
+    return next();
+  } catch (err) {
+    return next(err);
+  }
+}
+
+
 module.exports = {
   authenticateJWT,
   ensureLoggedIn,
